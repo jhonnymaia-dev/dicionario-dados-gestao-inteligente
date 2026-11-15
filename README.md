@@ -1,0 +1,1 @@
+# dicionario-dados-gestao-inteligente
