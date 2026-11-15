@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-tema="claro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Dicionário de Dados do projeto Gestão Inteligente (Holanda Seguros): 15 tabelas, governança LGPD, linhagem e RBAC.">
+  <meta name="author" content="Grupo 2 — UNICID">
+  <title>Dicionário de Dados — Gestão Inteligente | Holanda Seguros</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="botao-icone" id="botao-menu" type="button" aria-label="Abrir menu de tabelas" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>
+    <div class="marca">
+      <strong>Dicionário de Dados — Gestão Inteligente</strong>
+      <span>Holanda Seguros · Grupo 2 · UNICID</span>
+    </div>
+    <div class="espaco"></div>
+    <button class="botao-icone" id="botao-tema" type="button" aria-pressed="false" aria-label="Alternar tema claro e escuro"><svg class="icone-lua" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.3 22A10 10 0 0 1 9.7 2.3a1 1 0 0 1 1.2 1.3 8 8 0 0 0 9.5 9.5 1 1 0 0 1 1.3 1.2A10 10 0 0 1 12.3 22z"/></svg><svg class="icone-sol" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5h0a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0V3a1 1 0 0 1 1-1zm0 17a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0v-1a1 1 0 0 1 1-1zM3 11h2a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2zm16 0h2a1 1 0 0 1 0 2h-2a1 1 0 0 1 0-2zM5.6 4.2l1.4 1.4A1 1 0 0 1 5.6 7L4.2 5.6a1 1 0 0 1 1.4-1.4zm12.8 12.8 1.4 1.4a1 1 0 0 1-1.4 1.4L17 18.4a1 1 0 0 1 1.4-1.4zM18.4 4.2a1 1 0 0 1 1.4 1.4L18.4 7A1 1 0 0 1 17 5.6zM5.6 17 7 18.4a1 1 0 0 1-1.4 1.4l-1.4-1.4A1 1 0 0 1 5.6 17z"/></svg><span class="texto">Modo escuro</span></button>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Tabelas do banco de dados">
+      <h2>Projeto</h2>
+      <ul>
+        <li><a href="#identificacao">Identificação</a></li>
+        <li><a href="#data-literacy">Data Literacy</a></li>
+        <li><a href="#analise">Análise de coerência</a></li>
+        <li><a href="#dicionario">Legenda</a></li>
+      </ul>
+      <div id="nav-tabelas"></div>
+    </nav>
+    <div class="fundo-menu" id="fundo-menu"></div>
+
+    <main>
+      <section class="cartao" id="identificacao">
+        <h2>Identificação do Projeto de Modelagem</h2>
+        <div class="grade-ident">
+          <div class="item-ident"><span class="rotulo">Empresa / Cliente</span><span class="valor">Holanda Seguros</span></div>
+          <div class="item-ident"><span class="rotulo">Projeto</span><span class="valor">Gestão Inteligente</span></div>
+          <div class="item-ident"><span class="rotulo">Tecnologia</span><span class="valor">MySQL 8.0 (InnoDB, utf8mb4)</span></div>
+          <div class="item-ident"><span class="rotulo">Professor orientador</span><span class="valor">Prof. Diego Marques</span></div>
+          <div class="item-ident"><span class="rotulo">Versão da documentação</span><span class="valor">3.0 — 12/11/2026</span></div>
+          <div class="item-ident"><span class="rotulo">Cobertura do DDL</span><span class="valor"><span id="total-tabelas">15</span> tabelas · <span id="total-colunas">111</span> colunas</span></div>
+        </div>
+        <h3>Escopo</h3>
+        <p>Sistema de gestão do tráfego de clientes de seguro saúde da Holanda Seguros. A base de dados centraliza o cadastro de clientes pessoa física com consentimento LGPD, o registro de atendimentos com plano de preferência e origem do contato, a classificação de cada atendimento como Em dúvida, Fechado ou Não fechado com histórico imutável, o catálogo de planos individuais com as dez faixas etárias da ANS, as contratações com mensalidade congelada e o cancelamento por arrependimento, o painel de indicadores (taxa de conversão e motivos de perda), a gestão de usuários por perfil com trilha de auditoria e o atendimento aos direitos do titular de dados. Cobrança, emissão de boletos, sinistros e planos familiares ou empresariais estão fora do escopo.</p>
+        <h3>Responsáveis</h3>
+        <div class="rolagem">
+          <table class="tabela-simples">
+            <thead><tr><th>Integrante</th><th>RGM</th><th>Papel</th><th>Responsabilidade</th></tr></thead>
+            <tbody>
+              <tr><td>Kaiky Vieira dos Santos</td><td class="mono">47419288</td><td><span class="papel owner">Data Owner</span></td><td>Representante do cliente. Responde pelos domínios de clientes, atendimentos, contratos e solicitações do titular; aprova regras de negócio e mudanças nesses dados.</td></tr>
+              <tr><td>Jihady Nikuluz Cardoso</td><td class="mono">47560789</td><td><span class="papel owner">Data Owner</span></td><td>Líder do grupo. Responde pelos domínios de catálogo de planos, tabelas auxiliares, usuários e auditoria; aprova mudanças de estrutura e de acesso.</td></tr>
+              <tr><td>Breno Oliveira da Silva</td><td class="mono">47504749</td><td><span class="papel steward">Data Steward</span></td><td>Analista de requisitos. Rastreabilidade entre Requisitos, DER e DDL; metadados de clientes, atendimentos e LGPD.</td></tr>
+              <tr><td>Gustavo Mariano Carvalho</td><td class="mono">47720689</td><td><span class="papel steward">Data Steward</span></td><td>Qualidade dos dados do catálogo de planos e das faixas etárias (RN12; PR04).</td></tr>
+              <tr><td>Felipe Fragoso</td><td class="mono">1747539101</td><td><span class="papel steward">Data Steward</span></td><td>Qualidade dos dados de contratos e cancelamentos (RN06; RN13).</td></tr>
+              <tr><td>João Vitor da Silva</td><td class="mono">47685786</td><td><span class="papel steward">Data Steward</span></td><td>Manutenção das tabelas auxiliares de origem do contato e motivos (RF08).</td></tr>
+              <tr><td>Kaue Cândido Alberti</td><td class="mono">47556668</td><td><span class="papel steward">Data Steward</span></td><td>Trilha de auditoria e controles de segurança (RNF01; RNF09; RNF10).</td></tr>
+              <tr><td>Jonathan de Lima Santos</td><td class="mono">47421819</td><td><span class="papel steward">Data Steward</span></td><td>Formas de pagamento e consistência dos dados de contratação (RF05).</td></tr>
+              <tr><td>Johnathan Victor Fernandes</td><td class="mono">47729899</td><td><span class="papel steward">Data Steward</span></td><td>Parâmetros do sistema e publicação do dicionário de dados (RF08; RN08).</td></tr>
+              <tr><td>Daniel Biazotto Michellao</td><td class="mono">47506253</td><td><span class="papel steward">Data Steward</span></td><td>Qualidade dos dados de atendimentos e do painel de indicadores de tráfego (RF06; RN09).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="cartao" id="data-literacy">
+        <h2>Data Literacy (Cultura de Dados)</h2>
+        <p>Para a Holanda Seguros, o valor deste dicionário está em fazer com que atendentes, gerentes e a equipe técnica leiam os mesmos números da mesma forma. A pergunta central do negócio (quantos clientes fecharam, quantos desistiram, quantos seguem em dúvida e por quê) só tem resposta confiável quando todos sabem exatamente o que significa uma situação EM_DUVIDA, como a taxa de conversão é calculada e por que um cancelamento por arrependimento continua contado como fechado. Seguindo o DAMA-DMBOK, o dicionário funciona como o repositório central de metadados: cada coluna tem definição de negócio, tipo físico, restrições, classificação de privacidade, linhagem e responsável (Data Owner e Data Steward). Em linha com o COBIT 2019 (APO14 — Gerenciar Dados, e DSS05 — Gerenciar Serviços de Segurança), as tags de LGPD e de controle de acesso por perfil mostram onde estão os dados pessoais e quem pode lê-los ou alterá-los, o que reduz o risco de exposição de CPF e contatos, acelera o atendimento às solicitações do titular em até 15 dias e dá base auditável às decisões comerciais.</p>
+      </section>
+
+      <section class="cartao" id="analise">
+        <details class="analise">
+          <summary>Análise de coerência: Requisitos x DER x DDL (15 ajustes aplicados)</summary>
+          <p style="margin-top:12px">As três fontes foram cruzadas antes da publicação. Todos os ajustes abaixo já constam no Documento de Requisitos v3.0, no DER v3.0 e no script DDL usado neste dicionário.</p>
+          <ol class="lista-ajustes">
+          <li><span class="onde">DER — cardinalidade</span><br>No DER e na tabela de cardinalidades, altere plano → plano_faixa_preco de 1 : 1..N (||--|{) para 1 : 0..N (||--o{), porque o plano é cadastrado inativo antes das faixas; a exigência de dez faixas vale apenas para o plano ativo (RN12). <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">Requisitos 6.2 / RF10 — regra de negócio</span><br>O CHECK (consentimento_lgpd = 1) impedia a revogação do consentimento prevista no RF10. Incluída a coluna cliente.data_revogacao_consentimento e o CHECK combinado (consentimento 1 sem data de revogação, ou 0 com data de revogação); o cadastro continua exigindo 1 pelo gatilho trg_cliente_bi. <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">Requisitos RN14 / RF10 — LGPD</span><br>A PR03 classifica a data de nascimento como dado pessoal, mas a RN14 não a anonimizava. Incluída a generalização da data de nascimento para 1º de janeiro do mesmo ano em sp_anonimizar_cliente. <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">DER — tipo de dado</span><br>Em solicitacao_titular.tipo, acrescente NOT NULL (o atributo estava sem nulidade definida no DER). <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">DER — chave estrangeira</span><br>Em atendimento.id_motivo, acrescente NULL na anotação (obrigatório somente em NAO_FECHADO), alinhando o DER ao CHECK da RN04. <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">DER — domínio</span><br>Em historico_situacao, os ENUMs situacao_anterior e situacao_nova estavam sem domínio; informe EM_DUVIDA, FECHADO, NAO_FECHADO, iguais a atendimento.situacao. <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">Requisitos 6.2 — contrato</span><br>Faltavam restrições que garantissem a coerência do cancelamento. Incluídos CHECK ((situacao = &#x27;ATIVO&#x27;) = (data_cancelamento IS NULL)) e CHECK (data_cancelamento IS NULL OR data_cancelamento &gt;= data_assinatura). <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">Requisitos 6.2 — solicitacao_titular</span><br>Incluídos CHECK ((situacao = &#x27;ABERTA&#x27;) = (data_conclusao IS NULL)), CHECK (data_conclusao &gt;= data_solicitacao) e CHECK (situacao &lt;&gt; &#x27;RECUSADA&#x27; OR justificativa IS NOT NULL), para sustentar o prazo e a justificativa do RF10. <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">Requisitos 6.1 / DER — endereço principal</span><br>Nada impedia dois endereços principais ativos para o mesmo cliente. Incluída a coluna gerada endereco.chave_principal com índice UNIQUE (mesmo padrão da RN07). <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">Requisitos RF08 / 6.2 — parâmetro</span><br>O RF08 limita DIAS_RETORNO_CONTATO a inteiros de 1 a 365, mas não havia mecanismo previsto. Incluídos os gatilhos trg_parametro_bi e trg_parametro_bu. <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">Requisitos RNF01 — auditoria</span><br>A lista de tabelas auditadas não incluía endereco e solicitacao_titular, que guardam dados pessoais e decisões LGPD. As duas foram acrescentadas. <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">Requisitos RN12 — implementação</span><br>A RN12 citava um procedimento de ativação do plano que não existe no DDL. Texto alterado para os gatilhos trg_faixa_bi (limites da faixa) e trg_plano_bu (dez faixas e proporções na ativação). <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">DDL — valor padrão</span><br>O RF02 diz que data_ultima_interacao é gravada pelo servidor, mas o DER não previa DEFAULT. Incluído DEFAULT CURRENT_TIMESTAMP em atendimento.data_ultima_interacao. <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">Requisitos 1.2 e 6.1 — nomenclatura</span><br>A expressão versão 2.0 era usada para o sistema e para o documento ao mesmo tempo. Substituída por nesta versão do sistema. <span class="status-ok">Aplicado na v3.0</span></li>
+          <li><span class="onde">DER — metadados</span><br>O cabeçalho do DER indicava versão 2.0 (seção 6.1), mas o DER fica na seção 6.4. Cabeçalho atualizado para versão 3.0, seção 6.4. <span class="status-ok">Aplicado na v3.0</span></li>
+          </ol>
+          <h3>Itens verificados sem pendência</h3>
+          <ul>
+          <li>Chaves estrangeiras órfãs: nenhuma. As 16 FKs do DDL apontam para tabelas e colunas existentes, com o mesmo tipo.</li>
+          <li>Textos entre colchetes, páginas de instruções do modelo, caixas de Orientação e textos em cinza: nenhum encontrado.</li>
+          <li>Nomes fictícios no Histórico de Revisões: nenhum. O histórico tem 6 versões (0.1 a 3.0); a 3.0 é a revisão desta atividade.</li>
+          </ul>
+        </details>
+      </section>
+
+      <div class="cartao painel" role="region" aria-label="Painel de controle do dicionário">
+        <a class="botao destaque" href="docs/Especificacao_Requisitos_Regras_Negocio_BD.pdf" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16l-5-5h3V4h4v7h3l-5 5zm-7 2h14v2H5z"/></svg>Baixar Especificação de Requisitos (PDF)</a>
+        <button class="botao secundario" id="abrir-der" type="button" aria-haspopup="dialog" aria-controls="modal-der"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v5H3zm11 0h7v5h-7zM3 16h7v5H3zm11 0h7v5h-7zM6 8h2v3h9V8h2v5h-6v3h-2v-3H6z"/></svg>Abrir DER</button>
+        <div class="busca">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2a8 8 0 0 1 6.3 12.9l5.4 5.4-1.4 1.4-5.4-5.4A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
+          <input type="search" id="busca" placeholder="Buscar tabela ou coluna (atalho: /)" aria-label="Buscar tabela ou coluna" autocomplete="off">
+          <button type="button" id="limpar-busca" aria-label="Limpar busca">&times;</button>
+        </div>
+        <div class="resultado-busca" id="resultado-busca" aria-live="polite"></div>
+      </div>
+
+      <section class="cartao" id="dicionario">
+        <h2>Dicionário de Dados</h2>
+        <div class="legenda">
+          <span class="item"><span class="badge dps">DPS</span> Dado pessoal sensível</span>
+          <span class="item"><span class="badge dp">DP</span> Dado pessoal</span>
+          <span class="item"><span class="badge na">N/A</span> Não aplicável</span>
+          <span class="item"><b class="mono">[PK]</b> Chave primária</span>
+          <span class="item"><b class="mono">[FK]</b> Chave estrangeira</span>
+          <span class="item"><b class="mono">[UK]</b> Restrição de unicidade</span>
+        </div>
+        <p style="margin-top:12px; font-size:0.86rem; color:var(--texto-suave)">Perfis RBAC: Atendente, Gerente e Administrador (RNF01). Nenhum perfil executa exclusão física. senha_hash é classificado como DPS por ser credencial de autenticação.</p>
+      </section>
+
+      <section class="cartao tabela-dic" id="tabela_usuario" data-tabela="usuario" data-bloco="Cadastros e Acessos">
+        <header>
+          <h2>usuario</h2>
+          <span class="bloco">Cadastros e Acessos</span>
+        </header>
+        <p>Operadores do sistema (atendentes, gerentes e administradores) e seus perfis de acesso. Base do controle de acesso por perfil (RBAC) e da trilha de auditoria.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 7</span>
+          <span><b>Colunas com dados pessoais:</b> 3</span>
+          <span><b>Rastreabilidade:</b> RF07; RNF01; RNF09; RNF10</span>
+          <span><b>Data Owner:</b> Jihady Nikuluz Cardoso</span>
+          <span><b>Data Steward:</b> Breno Oliveira da Silva</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Administrador: leitura e escrita | Gerente: leitura (nome e perfil) | Atendente: somente o próprio registro</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_usuario">
+              <td class="atributo">id_usuario</td>
+              <td class="desc">Identificador único do usuário, gerado pelo SGBD e nunca reaproveitado.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD -&gt; atendimento, historico_situacao, log_auditoria, solicitacao_titular</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura (nome e perfil) | Atendente: somente o próprio registro</td>
+            </tr>
+            <tr data-coluna="nome">
+              <td class="atributo">nome</td>
+              <td class="desc">Nome do operador exibido nas telas, relatórios e no painel por atendente (RF06).</td>
+              <td class="tipo">VARCHAR(100)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Cadastro de usuários (RF07) -&gt; painel de indicadores e relatórios</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura (nome e perfil) | Atendente: somente o próprio registro</td>
+            </tr>
+            <tr data-coluna="login">
+              <td class="atributo">login</td>
+              <td class="desc">Identificador de acesso ao sistema. Único na base (RF07).</td>
+              <td class="tipo">VARCHAR(50)</td>
+              <td class="cons"><b>[UK]</b> <b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Cadastro de usuários (RF07) -&gt; autenticação</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura (nome e perfil) | Atendente: somente o próprio registro</td>
+            </tr>
+            <tr data-coluna="senha_hash">
+              <td class="atributo">senha_hash</td>
+              <td class="desc">Hash Argon2id da senha (mínimo de 10 caracteres). A senha nunca é gravada em claro (RNF09).</td>
+              <td class="tipo">VARCHAR(255)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge dps" title="Dado pessoal sensível">DPS</span></td>
+              <td class="linhagem">Tela de cadastro ou redefinição de senha -&gt; autenticação</td>
+              <td class="rbac">Administrador: somente redefinição | Gerente e Atendente: sem acesso | Aplicação: verificação do hash</td>
+            </tr>
+            <tr data-coluna="perfil">
+              <td class="atributo">perfil</td>
+              <td class="desc">Perfil de acesso que define as permissões: ATENDENTE, GERENTE ou ADMINISTRADOR (RNF01).</td>
+              <td class="tipo">ENUM(&#x27;ATENDENTE&#x27;, &#x27;GERENTE&#x27;, &#x27;ADMINISTRADOR&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Cadastro de usuários (RF07) -&gt; controle de acesso da aplicação</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura (nome e perfil) | Atendente: somente o próprio registro</td>
+            </tr>
+            <tr data-coluna="ativo">
+              <td class="atributo">ativo</td>
+              <td class="desc">Exclusão lógica: 1 ativo, 0 inativo. Usuário inativo não se autentica (RF07).</td>
+              <td class="tipo">TINYINT(1)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT 1</b> <b>CHECK (ck_usuario_ativo)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Cadastro de usuários (RF07) -&gt; autenticação</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura (nome e perfil) | Atendente: somente o próprio registro</td>
+            </tr>
+            <tr data-coluna="data_cadastro">
+              <td class="atributo">data_cadastro</td>
+              <td class="desc">Data e hora de criação do usuário, gravadas pelo servidor.</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT CURRENT_TIMESTAMP</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">SGBD (DEFAULT CURRENT_TIMESTAMP) -&gt; auditoria</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura (nome e perfil) | Atendente: somente o próprio registro</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_cliente" data-tabela="cliente" data-bloco="Cadastros e Acessos">
+        <header>
+          <h2>cliente</h2>
+          <span class="bloco">Cadastros e Acessos</span>
+        </header>
+        <p>Pessoa física que procura a Holanda Seguros para contratar um seguro saúde (potencial ou efetivo contratante). Concentra os dados pessoais protegidos pela LGPD.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 13</span>
+          <span><b>Colunas com dados pessoais:</b> 6</span>
+          <span><b>Rastreabilidade:</b> RF01; RF10; RN10; RN14; PR03; RNF09</span>
+          <span><b>Data Owner:</b> Kaiky Vieira dos Santos</span>
+          <span><b>Data Steward:</b> Breno Oliveira da Silva</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_cliente">
+              <td class="atributo">id_cliente</td>
+              <td class="desc">Identificador único do cliente, gerado pelo SGBD.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD -&gt; endereco, atendimento, solicitacao_titular</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="nome_completo">
+              <td class="atributo">nome_completo</td>
+              <td class="desc">Nome completo do cliente. Substituído por ANONIMIZADO na eliminação (RN14).</td>
+              <td class="tipo">VARCHAR(150)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; atendimento e relatórios</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="cpf_hash">
+              <td class="atributo">cpf_hash</td>
+              <td class="desc">HMAC-SHA256 do CPF, usado para unicidade e busca sem expor o CPF. Preservado na anonimização para manter as contagens (RN14).</td>
+              <td class="tipo">CHAR(64)</td>
+              <td class="cons"><b>[UK]</b> <b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Aplicação (hash do CPF digitado no RF01) -&gt; verificação de duplicidade</td>
+              <td class="rbac">Atendente e Gerente: busca por CPF (sem leitura do valor) | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="cpf_cifrado">
+              <td class="atributo">cpf_cifrado</td>
+              <td class="desc">CPF cifrado com AES-256. NULL somente após anonimização (CHECK).</td>
+              <td class="tipo">VARBINARY(255)</td>
+              <td class="cons"><b>NULL</b> <b>CHECK (ck_cliente_cpf_cifrado)</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Aplicação (cifra do CPF digitado no RF01) -&gt; consulta autorizada do titular</td>
+              <td class="rbac">Gerente: decifra mediante solicitação do titular (RF10) | Atendente e Administrador: sem leitura em claro</td>
+            </tr>
+            <tr data-coluna="data_nascimento">
+              <td class="atributo">data_nascimento</td>
+              <td class="desc">Data de nascimento usada para identificar a faixa etária na contratação (RN06). Generalizada para 1º de janeiro do ano na anonimização (RN14).</td>
+              <td class="tipo">DATE</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; sp_fechar_atendimento (faixa etária)</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="telefone">
+              <td class="atributo">telefone</td>
+              <td class="desc">Telefone principal de contato do cliente.</td>
+              <td class="tipo">VARCHAR(20)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; retorno de contato (RN08)</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="email">
+              <td class="atributo">email</td>
+              <td class="desc">E-mail de contato, opcional (RF01).</td>
+              <td class="tipo">VARCHAR(150)</td>
+              <td class="cons"><b>NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; retorno de contato (RN08)</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="consentimento_lgpd">
+              <td class="atributo">consentimento_lgpd</td>
+              <td class="desc">Consentimento para tratamento dos dados: 1 vigente, 0 revogado. O cadastro exige 1; o valor 0 exige data de revogação (CHECK; PR03).</td>
+              <td class="tipo">TINYINT(1)</td>
+              <td class="cons"><b>NOT NULL</b> <b>CHECK (ck_cliente_consentimento)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) / solicitação de revogação (RF10) -&gt; conformidade LGPD</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_consentimento">
+              <td class="atributo">data_consentimento</td>
+              <td class="desc">Data e hora em que o consentimento foi registrado (PR03).</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; evidência de conformidade</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_revogacao_consentimento">
+              <td class="atributo">data_revogacao_consentimento</td>
+              <td class="desc">Data e hora da revogação do consentimento pelo titular (RF10). Preenchida somente quando consentimento_lgpd = 0.</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NULL</b> <b>CHECK (ck_cliente_consentimento)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Solicitação do titular do tipo REVOGACAO (RF10) -&gt; conformidade LGPD</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_cadastro">
+              <td class="atributo">data_cadastro</td>
+              <td class="desc">Data e hora do cadastro, gravadas pelo servidor.</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT CURRENT_TIMESTAMP</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">SGBD (DEFAULT CURRENT_TIMESTAMP) -&gt; relatórios</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_anonimizacao">
+              <td class="atributo">data_anonimizacao</td>
+              <td class="desc">Data e hora da anonimização; preenchida por sp_anonimizar_cliente (RN14).</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NULL</b> <b>CHECK (ck_cliente_cpf_cifrado)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">sp_anonimizar_cliente -&gt; painel (oculta dados pessoais)</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="ativo">
+              <td class="atributo">ativo</td>
+              <td class="desc">Exclusão lógica: 1 ativo, 0 inativo. Cliente inativo não recebe novo atendimento (RN10).</td>
+              <td class="tipo">TINYINT(1)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT 1</b> <b>CHECK (ck_cliente_ativo)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Cadastro (RF01) -&gt; gatilho trg_atendimento_bi</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_endereco" data-tabela="endereco" data-bloco="Cadastros e Acessos">
+        <header>
+          <h2>endereco</h2>
+          <span class="bloco">Cadastros e Acessos</span>
+        </header>
+        <p>Endereço residencial do cliente com atributos atômicos. Cada cliente possui ao menos um endereço e no máximo um endereço principal ativo.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 12</span>
+          <span><b>Colunas com dados pessoais:</b> 7</span>
+          <span><b>Rastreabilidade:</b> RF01; RN14; PR03</span>
+          <span><b>Data Owner:</b> Kaiky Vieira dos Santos</span>
+          <span><b>Data Steward:</b> Breno Oliveira da Silva</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_endereco">
+              <td class="atributo">id_endereco</td>
+              <td class="desc">Identificador único do endereço, gerado pelo SGBD.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="id_cliente">
+              <td class="atributo">id_cliente</td>
+              <td class="desc">Cliente dono do endereço (N:1 com cliente).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; cliente.id_cliente]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">cliente.id_cliente -&gt; endereco</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="logradouro">
+              <td class="atributo">logradouro</td>
+              <td class="desc">Rua, avenida ou similar. Anonimizado na eliminação (RN14).</td>
+              <td class="tipo">VARCHAR(150)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; correspondência</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="numero">
+              <td class="atributo">numero</td>
+              <td class="desc">Número do imóvel.</td>
+              <td class="tipo">VARCHAR(10)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; correspondência</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="complemento">
+              <td class="atributo">complemento</td>
+              <td class="desc">Complemento opcional (apartamento, bloco).</td>
+              <td class="tipo">VARCHAR(60)</td>
+              <td class="cons"><b>NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; correspondência</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="bairro">
+              <td class="atributo">bairro</td>
+              <td class="desc">Bairro do endereço.</td>
+              <td class="tipo">VARCHAR(80)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; correspondência</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="cidade">
+              <td class="atributo">cidade</td>
+              <td class="desc">Cidade. Mantida na tabela (desnormalização justificada: sem base oficial de CEPs).</td>
+              <td class="tipo">VARCHAR(80)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; relatórios regionais</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="uf">
+              <td class="atributo">uf</td>
+              <td class="desc">Sigla da unidade federativa com 2 letras.</td>
+              <td class="tipo">CHAR(2)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; relatórios regionais</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="cep">
+              <td class="atributo">cep</td>
+              <td class="desc">CEP com 8 dígitos numéricos, sem máscara (CHECK).</td>
+              <td class="tipo">CHAR(8)</td>
+              <td class="cons"><b>NOT NULL</b> <b>CHECK (ck_endereco_cep)</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; correspondência</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="principal">
+              <td class="atributo">principal</td>
+              <td class="desc">Indica o endereço principal: 1 sim, 0 não.</td>
+              <td class="tipo">TINYINT(1)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT 1</b> <b>CHECK (ck_endereco_principal)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; chave_principal</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="ativo">
+              <td class="atributo">ativo</td>
+              <td class="desc">Exclusão lógica: 1 ativo, 0 inativo.</td>
+              <td class="tipo">TINYINT(1)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT 1</b> <b>CHECK (ck_endereco_ativo)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Formulário de cadastro (RF01) -&gt; chave_principal</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            <tr data-coluna="chave_principal">
+              <td class="atributo">chave_principal</td>
+              <td class="desc">Coluna gerada: recebe id_cliente quando o endereço é principal e ativo; o índice UNIQUE garante um único endereço principal ativo por cliente.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b>[UK]</b> <b>NULL</b> <b>GENERATED STORED</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Calculada pelo SGBD a partir de principal, ativo e id_cliente -&gt; índice uk_endereco_principal</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_solicitacao_titular" data-tabela="solicitacao_titular" data-bloco="Cadastros e Acessos">
+        <header>
+          <h2>solicitacao_titular</h2>
+          <span class="bloco">Cadastros e Acessos</span>
+        </header>
+        <p>Solicitações do titular de dados previstas no art. 18 da LGPD (acesso, correção, portabilidade, eliminação ou revogação do consentimento), concluídas em até 15 dias.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 8</span>
+          <span><b>Colunas com dados pessoais:</b> 1</span>
+          <span><b>Rastreabilidade:</b> RF10; RN14; PR01; PR03</span>
+          <span><b>Data Owner:</b> Kaiky Vieira dos Santos</span>
+          <span><b>Data Steward:</b> Breno Oliveira da Silva</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: sem acesso</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_solicitacao">
+              <td class="atributo">id_solicitacao</td>
+              <td class="desc">Identificador único da solicitação.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: sem acesso</td>
+            </tr>
+            <tr data-coluna="id_cliente">
+              <td class="atributo">id_cliente</td>
+              <td class="desc">Titular dos dados que fez a solicitação.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; cliente.id_cliente]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">cliente.id_cliente -&gt; sp_anonimizar_cliente</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: sem acesso</td>
+            </tr>
+            <tr data-coluna="id_usuario">
+              <td class="atributo">id_usuario</td>
+              <td class="desc">Usuário responsável pelo tratamento (RF10).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; usuario.id_usuario]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">usuario.id_usuario -&gt; auditoria</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: sem acesso</td>
+            </tr>
+            <tr data-coluna="tipo">
+              <td class="atributo">tipo</td>
+              <td class="desc">Tipo da solicitação: ACESSO, CORRECAO, PORTABILIDADE, ELIMINACAO ou REVOGACAO.</td>
+              <td class="tipo">ENUM(&#x27;ACESSO&#x27;, &#x27;CORRECAO&#x27;, &#x27;PORTABILIDADE&#x27;, &#x27;ELIMINACAO&#x27;, &#x27;REVOGACAO&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Canal de atendimento ao titular (RF10) -&gt; tratamento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: sem acesso</td>
+            </tr>
+            <tr data-coluna="situacao">
+              <td class="atributo">situacao</td>
+              <td class="desc">ABERTA (padrão), CONCLUIDA ou RECUSADA. RECUSADA exige justificativa (CHECK).</td>
+              <td class="tipo">ENUM(&#x27;ABERTA&#x27;, &#x27;CONCLUIDA&#x27;, &#x27;RECUSADA&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT ABERTA</b> <b>CHECK (ck_solicitacao_conclusao)</b> <b>CHECK (ck_solicitacao_justificativa)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerente ou Administrador (RF10) -&gt; controle de prazo (15 dias)</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: sem acesso</td>
+            </tr>
+            <tr data-coluna="data_solicitacao">
+              <td class="atributo">data_solicitacao</td>
+              <td class="desc">Data e hora do registro, gravadas pelo servidor; início do prazo de 15 dias (PR03).</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT CURRENT_TIMESTAMP</b> <b>CHECK (ck_solicitacao_conclusao_data)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">SGBD (DEFAULT CURRENT_TIMESTAMP) -&gt; controle de prazo</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: sem acesso</td>
+            </tr>
+            <tr data-coluna="data_conclusao">
+              <td class="atributo">data_conclusao</td>
+              <td class="desc">Data de conclusão: nula somente quando ABERTA e nunca anterior à solicitação (CHECK).</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NULL</b> <b>CHECK (ck_solicitacao_conclusao)</b> <b>CHECK (ck_solicitacao_conclusao_data)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerente, Administrador ou sp_anonimizar_cliente -&gt; conformidade</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: sem acesso</td>
+            </tr>
+            <tr data-coluna="justificativa">
+              <td class="atributo">justificativa</td>
+              <td class="desc">Justificativa do tratamento ou da retenção de dados mínimos (PR01). Obrigatória quando RECUSADA.</td>
+              <td class="tipo">TEXT</td>
+              <td class="cons"><b>NULL</b> <b>CHECK (ck_solicitacao_justificativa)</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Gerente ou Administrador (RF10) -&gt; conformidade</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: sem acesso</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_tipo_plano" data-tabela="tipo_plano" data-bloco="Catálogo de Planos">
+        <header>
+          <h2>tipo_plano</h2>
+          <span class="bloco">Catálogo de Planos</span>
+        </header>
+        <p>Classificação comercial dos planos. Na versão atual, apenas o tipo individual é comercializado.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 3</span>
+          <span><b>Colunas com dados pessoais:</b> 0</span>
+          <span><b>Rastreabilidade:</b> RF04; RF08</span>
+          <span><b>Data Owner:</b> Jihady Nikuluz Cardoso</span>
+          <span><b>Data Steward:</b> Gustavo Mariano Carvalho</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_tipo_plano">
+              <td class="atributo">id_tipo_plano</td>
+              <td class="desc">Identificador único do tipo de plano.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD -&gt; plano</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="nome">
+              <td class="atributo">nome</td>
+              <td class="desc">Nome do tipo (ex.: INDIVIDUAL). Único na tabela (RF08).</td>
+              <td class="tipo">VARCHAR(50)</td>
+              <td class="cons"><b>[UK]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Manutenção de tabelas auxiliares (RF08) -&gt; catálogo de planos</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="ativo">
+              <td class="atributo">ativo</td>
+              <td class="desc">Exclusão lógica: itens inativos não podem ser usados em novos planos (RF08).</td>
+              <td class="tipo">TINYINT(1)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT 1</b> <b>CHECK (ck_tipo_plano_ativo)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Manutenção de tabelas auxiliares (RF08) -&gt; catálogo de planos</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_plano" data-tabela="plano" data-bloco="Catálogo de Planos">
+        <header>
+          <h2>plano</h2>
+          <span class="bloco">Catálogo de Planos</span>
+        </header>
+        <p>Seguro saúde registrado na ANS, comercializado pela empresa e escolhido como preferência do cliente no atendimento.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 9</span>
+          <span><b>Colunas com dados pessoais:</b> 0</span>
+          <span><b>Rastreabilidade:</b> RF04; RN02; RN12; PR04</span>
+          <span><b>Data Owner:</b> Jihady Nikuluz Cardoso</span>
+          <span><b>Data Steward:</b> Gustavo Mariano Carvalho</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_plano">
+              <td class="atributo">id_plano</td>
+              <td class="desc">Identificador único do plano.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD -&gt; plano_faixa_preco, atendimento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="id_tipo_plano">
+              <td class="atributo">id_tipo_plano</td>
+              <td class="desc">Tipo comercial do plano (N:1 com tipo_plano).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; tipo_plano.id_tipo_plano]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">tipo_plano.id_tipo_plano -&gt; plano</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="nome">
+              <td class="atributo">nome</td>
+              <td class="desc">Nome comercial do plano.</td>
+              <td class="tipo">VARCHAR(100)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Catálogo de planos (RF04) -&gt; atendimento e painel</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="registro_ans">
+              <td class="atributo">registro_ans</td>
+              <td class="desc">Número de registro do produto na ANS. Obrigatório e único (PR04).</td>
+              <td class="tipo">VARCHAR(20)</td>
+              <td class="cons"><b>[UK]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Cadastro manual a partir do registro ANS (RF04) -&gt; contratos</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="segmentacao">
+              <td class="atributo">segmentacao</td>
+              <td class="desc">Segmentação assistencial: AMBULATORIAL, HOSPITALAR, HOSP_OBSTETRICIA, REFERENCIA ou ODONTOLOGICO (PR04).</td>
+              <td class="tipo">ENUM(&#x27;AMBULATORIAL&#x27;, &#x27;HOSPITALAR&#x27;, &#x27;HOSP_OBSTETRICIA&#x27;, &#x27;REFERENCIA&#x27;, &#x27;ODONTOLOGICO&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Catálogo de planos (RF04) -&gt; atendimento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="acomodacao">
+              <td class="atributo">acomodacao</td>
+              <td class="desc">Tipo de acomodação: ENFERMARIA ou APARTAMENTO (PR04).</td>
+              <td class="tipo">ENUM(&#x27;ENFERMARIA&#x27;, &#x27;APARTAMENTO&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Catálogo de planos (RF04) -&gt; atendimento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="abrangencia">
+              <td class="atributo">abrangencia</td>
+              <td class="desc">Abrangência geográfica: MUNICIPAL, GRUPO_MUNICIPIOS, ESTADUAL, GRUPO_ESTADOS ou NACIONAL (PR04).</td>
+              <td class="tipo">ENUM(&#x27;MUNICIPAL&#x27;, &#x27;GRUPO_MUNICIPIOS&#x27;, &#x27;ESTADUAL&#x27;, &#x27;GRUPO_ESTADOS&#x27;, &#x27;NACIONAL&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Catálogo de planos (RF04) -&gt; atendimento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="ativo">
+              <td class="atributo">ativo</td>
+              <td class="desc">1 ativo, 0 inativo. Só é ativado com as dez faixas da RN12 (gatilho trg_plano_bu); plano inativo não pode ser escolhido em novo atendimento (RN02).</td>
+              <td class="tipo">TINYINT(1)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT 1</b> <b>CHECK (ck_plano_ativo)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Catálogo de planos (RF04) -&gt; gatilho trg_atendimento_bi</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="data_cadastro">
+              <td class="atributo">data_cadastro</td>
+              <td class="desc">Data e hora do cadastro do plano, gravadas pelo servidor.</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT CURRENT_TIMESTAMP</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">SGBD (DEFAULT CURRENT_TIMESTAMP) -&gt; auditoria</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_plano_faixa_preco" data-tabela="plano_faixa_preco" data-bloco="Catálogo de Planos">
+        <header>
+          <h2>plano_faixa_preco</h2>
+          <span class="bloco">Catálogo de Planos</span>
+        </header>
+        <p>Valor da mensalidade de cada plano por faixa etária padronizada pela ANS (dez faixas: 0-18 até 59 ou mais).</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 5</span>
+          <span><b>Colunas com dados pessoais:</b> 0</span>
+          <span><b>Rastreabilidade:</b> RF04; RN06; RN12; PR04</span>
+          <span><b>Data Owner:</b> Jihady Nikuluz Cardoso</span>
+          <span><b>Data Steward:</b> Gustavo Mariano Carvalho</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_faixa">
+              <td class="atributo">id_faixa</td>
+              <td class="desc">Identificador único da faixa de preço.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD -&gt; contrato</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="id_plano">
+              <td class="atributo">id_plano</td>
+              <td class="desc">Plano ao qual a faixa pertence. Único em conjunto com idade_minima (RN12).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; plano.id_plano]</b> <b>[UK composta (id_plano, idade_minima)]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">plano.id_plano -&gt; plano_faixa_preco</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="idade_minima">
+              <td class="atributo">idade_minima</td>
+              <td class="desc">Idade inicial da faixa, maior ou igual a 0 (CHECK).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b>[UK composta (id_plano, idade_minima)]</b> <b>NOT NULL</b> <b>CHECK (ck_faixa_idade_maxima)</b> <b>CHECK (ck_faixa_idade_minima)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Tabela de preços do plano (RF04) -&gt; sp_fechar_atendimento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="idade_maxima">
+              <td class="atributo">idade_maxima</td>
+              <td class="desc">Idade final da faixa; NULL somente na faixa de 59 anos ou mais. Maior ou igual à idade mínima (CHECK).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b>NULL</b> <b>CHECK (ck_faixa_idade_maxima)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Tabela de preços do plano (RF04) -&gt; sp_fechar_atendimento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="valor_mensalidade">
+              <td class="atributo">valor_mensalidade</td>
+              <td class="desc">Valor mensal da faixa, maior que zero. A 10ª faixa não excede seis vezes a 1ª (RN12).</td>
+              <td class="tipo">DECIMAL(10,2)</td>
+              <td class="cons"><b>NOT NULL</b> <b>CHECK (ck_faixa_valor)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Tabela de preços do plano (RF04) -&gt; contrato.valor_mensalidade (congelado)</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_origem_contato" data-tabela="origem_contato" data-bloco="Tabelas Auxiliares e Parâmetros">
+        <header>
+          <h2>origem_contato</h2>
+          <span class="bloco">Tabelas Auxiliares e Parâmetros</span>
+        </header>
+        <p>Canal pelo qual o cliente chegou à empresa (site, telefone, WhatsApp, redes sociais, indicação, loja), classificado como presencial ou remoto para o direito de arrependimento.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 4</span>
+          <span><b>Colunas com dados pessoais:</b> 0</span>
+          <span><b>Rastreabilidade:</b> RF08; RN13; PR02</span>
+          <span><b>Data Owner:</b> Jihady Nikuluz Cardoso</span>
+          <span><b>Data Steward:</b> João Vitor da Silva</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_origem">
+              <td class="atributo">id_origem</td>
+              <td class="desc">Identificador único da origem do contato.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD -&gt; atendimento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="nome">
+              <td class="atributo">nome</td>
+              <td class="desc">Nome da origem (ex.: WhatsApp). Único na tabela.</td>
+              <td class="tipo">VARCHAR(50)</td>
+              <td class="cons"><b>[UK]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Manutenção de tabelas auxiliares (RF08) -&gt; painel por origem (RF06)</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="canal">
+              <td class="atributo">canal</td>
+              <td class="desc">Canal da origem: PRESENCIAL ou REMOTO. Define o direito de arrependimento (PR02; RN13).</td>
+              <td class="tipo">ENUM(&#x27;PRESENCIAL&#x27;, &#x27;REMOTO&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Manutenção de tabelas auxiliares (RF08) -&gt; gatilho trg_contrato_bu</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="ativo">
+              <td class="atributo">ativo</td>
+              <td class="desc">Exclusão lógica: inativo não pode ser usado em novos atendimentos.</td>
+              <td class="tipo">TINYINT(1)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT 1</b> <b>CHECK (ck_origem_contato_ativo)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Manutenção de tabelas auxiliares (RF08) -&gt; atendimento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_motivo_nao_fechamento" data-tabela="motivo_nao_fechamento" data-bloco="Tabelas Auxiliares e Parâmetros">
+        <header>
+          <h2>motivo_nao_fechamento</h2>
+          <span class="bloco">Tabelas Auxiliares e Parâmetros</span>
+        </header>
+        <p>Motivos pelos quais o cliente não contratou o plano (preço, carência, rede credenciada, concorrência, falta de interesse).</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 3</span>
+          <span><b>Colunas com dados pessoais:</b> 0</span>
+          <span><b>Rastreabilidade:</b> RF08; RN04</span>
+          <span><b>Data Owner:</b> Jihady Nikuluz Cardoso</span>
+          <span><b>Data Steward:</b> João Vitor da Silva</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_motivo">
+              <td class="atributo">id_motivo</td>
+              <td class="desc">Identificador único do motivo.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD -&gt; atendimento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="descricao">
+              <td class="atributo">descricao</td>
+              <td class="desc">Descrição do motivo. Única na tabela.</td>
+              <td class="tipo">VARCHAR(100)</td>
+              <td class="cons"><b>[UK]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Manutenção de tabelas auxiliares (RF08) -&gt; painel de motivos (RF06)</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="ativo">
+              <td class="atributo">ativo</td>
+              <td class="desc">Exclusão lógica: inativo não pode ser usado em novas classificações.</td>
+              <td class="tipo">TINYINT(1)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT 1</b> <b>CHECK (ck_motivo_ativo)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Manutenção de tabelas auxiliares (RF08) -&gt; atendimento</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_forma_pagamento" data-tabela="forma_pagamento" data-bloco="Tabelas Auxiliares e Parâmetros">
+        <header>
+          <h2>forma_pagamento</h2>
+          <span class="bloco">Tabelas Auxiliares e Parâmetros</span>
+        </header>
+        <p>Formas de pagamento aceitas na contratação (boleto, débito automático, cartão de crédito). A cobrança ocorre fora do sistema.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 3</span>
+          <span><b>Colunas com dados pessoais:</b> 0</span>
+          <span><b>Rastreabilidade:</b> RF05; RF08</span>
+          <span><b>Data Owner:</b> Jihady Nikuluz Cardoso</span>
+          <span><b>Data Steward:</b> Jonathan de Lima Santos</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_forma_pagamento">
+              <td class="atributo">id_forma_pagamento</td>
+              <td class="desc">Identificador único da forma de pagamento.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD -&gt; contrato</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="descricao">
+              <td class="atributo">descricao</td>
+              <td class="desc">Descrição da forma de pagamento. Única na tabela.</td>
+              <td class="tipo">VARCHAR(50)</td>
+              <td class="cons"><b>[UK]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Manutenção de tabelas auxiliares (RF08) -&gt; contrato</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            <tr data-coluna="ativo">
+              <td class="atributo">ativo</td>
+              <td class="desc">Exclusão lógica: inativa não pode ser usada em novos contratos.</td>
+              <td class="tipo">TINYINT(1)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT 1</b> <b>CHECK (ck_forma_pagamento_ativo)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Manutenção de tabelas auxiliares (RF08) -&gt; contrato</td>
+              <td class="rbac">Gerente: leitura e escrita | Administrador: leitura e escrita | Atendente: leitura</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_parametro_sistema" data-tabela="parametro_sistema" data-bloco="Tabelas Auxiliares e Parâmetros">
+        <header>
+          <h2>parametro_sistema</h2>
+          <span class="bloco">Tabelas Auxiliares e Parâmetros</span>
+        </header>
+        <p>Parâmetros configuráveis do sistema, como o prazo de retorno de contato aos clientes em dúvida. Entidade independente, sem relacionamentos.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 5</span>
+          <span><b>Colunas com dados pessoais:</b> 0</span>
+          <span><b>Rastreabilidade:</b> RF08; RN08</span>
+          <span><b>Data Owner:</b> Jihady Nikuluz Cardoso</span>
+          <span><b>Data Steward:</b> Johnathan Victor Fernandes</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Administrador: leitura e escrita | Gerente: leitura | Atendente: sem acesso direto</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_parametro">
+              <td class="atributo">id_parametro</td>
+              <td class="desc">Identificador único do parâmetro.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura | Atendente: sem acesso direto</td>
+            </tr>
+            <tr data-coluna="chave">
+              <td class="atributo">chave</td>
+              <td class="desc">Nome técnico do parâmetro (ex.: DIAS_RETORNO_CONTATO). Único.</td>
+              <td class="tipo">VARCHAR(50)</td>
+              <td class="cons"><b>[UK]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Script de carga inicial / RF08 -&gt; visões e regras</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura | Atendente: sem acesso direto</td>
+            </tr>
+            <tr data-coluna="valor">
+              <td class="atributo">valor</td>
+              <td class="desc">Valor do parâmetro. DIAS_RETORNO_CONTATO aceita inteiros de 1 a 365 (gatilhos trg_parametro_bi e trg_parametro_bu).</td>
+              <td class="tipo">VARCHAR(100)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Administrador (RF08) -&gt; vw_retorno_pendente</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura | Atendente: sem acesso direto</td>
+            </tr>
+            <tr data-coluna="descricao">
+              <td class="atributo">descricao</td>
+              <td class="desc">Explicação do parâmetro para os usuários.</td>
+              <td class="tipo">VARCHAR(255)</td>
+              <td class="cons"><b>NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Administrador (RF08) -&gt; tela de parâmetros</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura | Atendente: sem acesso direto</td>
+            </tr>
+            <tr data-coluna="data_atualizacao">
+              <td class="atributo">data_atualizacao</td>
+              <td class="desc">Data e hora da última alteração, atualizada automaticamente pelo servidor.</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT CURRENT_TIMESTAMP</b> <b>ON UPDATE CURRENT_TIMESTAMP</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">SGBD (ON UPDATE CURRENT_TIMESTAMP) -&gt; auditoria</td>
+              <td class="rbac">Administrador: leitura e escrita | Gerente: leitura | Atendente: sem acesso direto</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_atendimento" data-tabela="atendimento" data-bloco="Transacional">
+        <header>
+          <h2>atendimento</h2>
+          <span class="bloco">Transacional</span>
+        </header>
+        <p>Entidade central do tráfego de clientes: negociação de um cliente com seu plano de preferência, classificada como Em dúvida, Fechado ou Não fechado.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 12</span>
+          <span><b>Colunas com dados pessoais:</b> 1</span>
+          <span><b>Rastreabilidade:</b> RF02; RF03; RN01; RN02; RN04; RN07; RN08; RN11</span>
+          <span><b>Data Owner:</b> Kaiky Vieira dos Santos</span>
+          <span><b>Data Steward:</b> Breno Oliveira da Silva</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_atendimento">
+              <td class="atributo">id_atendimento</td>
+              <td class="desc">Identificador único do atendimento.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD -&gt; historico_situacao, contrato</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="id_cliente">
+              <td class="atributo">id_cliente</td>
+              <td class="desc">Cliente atendido; deve estar ativo (RN02; RN10).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; cliente.id_cliente]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">cliente.id_cliente -&gt; atendimento</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="id_usuario">
+              <td class="atributo">id_usuario</td>
+              <td class="desc">Atendente responsável pelo registro (RN02).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; usuario.id_usuario]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">usuario.id_usuario -&gt; painel por atendente</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="id_plano">
+              <td class="atributo">id_plano</td>
+              <td class="desc">Plano de preferência do cliente; deve estar ativo (RN02).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; plano.id_plano]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">plano.id_plano -&gt; painel por plano</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="id_origem">
+              <td class="atributo">id_origem</td>
+              <td class="desc">Origem do contato do cliente (RN02).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; origem_contato.id_origem]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">origem_contato.id_origem -&gt; painel por origem; arrependimento (RN13)</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="id_motivo">
+              <td class="atributo">id_motivo</td>
+              <td class="desc">Motivo do não fechamento: obrigatório somente em NAO_FECHADO e nulo nas demais situações (CHECK; RN04).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; motivo_nao_fechamento.id_motivo]</b> <b>NULL</b> <b>CHECK (ck_atendimento_motivo)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">motivo_nao_fechamento.id_motivo -&gt; painel de motivos</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="situacao">
+              <td class="atributo">situacao</td>
+              <td class="desc">Situação atual: EM_DUVIDA (padrão), FECHADO ou NAO_FECHADO. Transições controladas pelo gatilho trg_atendimento_bu (RN01; RN11).</td>
+              <td class="tipo">ENUM(&#x27;EM_DUVIDA&#x27;, &#x27;FECHADO&#x27;, &#x27;NAO_FECHADO&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT EM_DUVIDA</b> <b>CHECK (ck_atendimento_encerramento)</b> <b>CHECK (ck_atendimento_motivo)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Classificação do atendente (RF03) ou sp_fechar_atendimento -&gt; historico_situacao e vw_funil_atendimento</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="chave_aberto">
+              <td class="atributo">chave_aberto</td>
+              <td class="desc">Coluna gerada: id_cliente-id_plano quando EM_DUVIDA. O índice UNIQUE impede dois atendimentos em aberto do mesmo cliente para o mesmo plano (RN07; RNF08).</td>
+              <td class="tipo">VARCHAR(30)</td>
+              <td class="cons"><b>[UK]</b> <b>NULL</b> <b>GENERATED STORED</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Calculada pelo SGBD -&gt; índice uk_atendimento_chave_aberto</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_abertura">
+              <td class="atributo">data_abertura</td>
+              <td class="desc">Data e hora da abertura, gravadas pelo servidor.</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT CURRENT_TIMESTAMP</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">SGBD (DEFAULT CURRENT_TIMESTAMP) -&gt; filtros por período (RF06)</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_ultima_interacao">
+              <td class="atributo">data_ultima_interacao</td>
+              <td class="desc">Data da última interação (mudança de situação ou de observação), mantida pelo gatilho (RN08).</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT CURRENT_TIMESTAMP</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">SGBD e gatilho trg_atendimento_bu -&gt; vw_retorno_pendente</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_encerramento">
+              <td class="atributo">data_encerramento</td>
+              <td class="desc">Data de encerramento: nula somente em EM_DUVIDA (CHECK; RN04).</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NULL</b> <b>CHECK (ck_atendimento_encerramento)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gatilho trg_atendimento_bu / sp_fechar_atendimento -&gt; relatórios</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="observacao">
+              <td class="atributo">observacao</td>
+              <td class="desc">Anotações livres do atendente. Não deve conter dados de saúde do cliente (PR03).</td>
+              <td class="tipo">TEXT</td>
+              <td class="cons"><b>NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Atendente (RF02; RF03) -&gt; historico_situacao</td>
+              <td class="rbac">Atendente: leitura e escrita | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_historico_situacao" data-tabela="historico_situacao" data-bloco="Transacional">
+        <header>
+          <h2>historico_situacao</h2>
+          <span class="bloco">Transacional</span>
+        </header>
+        <p>Registro imutável (somente inserção) de cada abertura e mudança de situação de um atendimento.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 7</span>
+          <span><b>Colunas com dados pessoais:</b> 1</span>
+          <span><b>Rastreabilidade:</b> RF03; RN05; PR01</span>
+          <span><b>Data Owner:</b> Kaiky Vieira dos Santos</span>
+          <span><b>Data Steward:</b> Breno Oliveira da Silva</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Atendente: leitura | Gerente: leitura | Administrador: leitura | Escrita: somente gatilhos | Alteração e exclusão: bloqueadas</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_historico">
+              <td class="atributo">id_historico</td>
+              <td class="desc">Identificador único do registro de histórico (BIGINT para alto volume).</td>
+              <td class="tipo">BIGINT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD</td>
+              <td class="rbac">Atendente: leitura | Gerente: leitura | Administrador: leitura | Escrita: somente gatilhos | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="id_atendimento">
+              <td class="atributo">id_atendimento</td>
+              <td class="desc">Atendimento cuja situação foi alterada.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; atendimento.id_atendimento]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">atendimento.id_atendimento (gatilhos AFTER INSERT/UPDATE) -&gt; auditoria</td>
+              <td class="rbac">Atendente: leitura | Gerente: leitura | Administrador: leitura | Escrita: somente gatilhos | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="id_usuario">
+              <td class="atributo">id_usuario</td>
+              <td class="desc">Usuário responsável pela mudança, obtido de @id_usuario_app.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; usuario.id_usuario]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Variável de sessão da aplicação -&gt; auditoria</td>
+              <td class="rbac">Atendente: leitura | Gerente: leitura | Administrador: leitura | Escrita: somente gatilhos | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="situacao_anterior">
+              <td class="atributo">situacao_anterior</td>
+              <td class="desc">Situação antes da mudança; NULL somente no registro de abertura.</td>
+              <td class="tipo">ENUM(&#x27;EM_DUVIDA&#x27;, &#x27;FECHADO&#x27;, &#x27;NAO_FECHADO&#x27;)</td>
+              <td class="cons"><b>NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">atendimento.situacao (OLD) -&gt; auditoria</td>
+              <td class="rbac">Atendente: leitura | Gerente: leitura | Administrador: leitura | Escrita: somente gatilhos | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="situacao_nova">
+              <td class="atributo">situacao_nova</td>
+              <td class="desc">Situação após a mudança.</td>
+              <td class="tipo">ENUM(&#x27;EM_DUVIDA&#x27;, &#x27;FECHADO&#x27;, &#x27;NAO_FECHADO&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">atendimento.situacao (NEW) -&gt; auditoria</td>
+              <td class="rbac">Atendente: leitura | Gerente: leitura | Administrador: leitura | Escrita: somente gatilhos | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="observacao">
+              <td class="atributo">observacao</td>
+              <td class="desc">Observação registrada na mudança (RF03).</td>
+              <td class="tipo">TEXT</td>
+              <td class="cons"><b>NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">atendimento.observacao -&gt; auditoria</td>
+              <td class="rbac">Atendente: leitura | Gerente: leitura | Administrador: leitura | Escrita: somente gatilhos | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="data_alteracao">
+              <td class="atributo">data_alteracao</td>
+              <td class="desc">Data e hora da mudança, gravadas pelo servidor.</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT CURRENT_TIMESTAMP</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">SGBD (DEFAULT CURRENT_TIMESTAMP) -&gt; auditoria</td>
+              <td class="rbac">Atendente: leitura | Gerente: leitura | Administrador: leitura | Escrita: somente gatilhos | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_contrato" data-tabela="contrato" data-bloco="Transacional">
+        <header>
+          <h2>contrato</h2>
+          <span class="bloco">Transacional</span>
+        </header>
+        <p>Contratação efetivada quando o atendimento é fechado, com valor da mensalidade congelado e controle de cancelamento por arrependimento.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 11</span>
+          <span><b>Colunas com dados pessoais:</b> 0</span>
+          <span><b>Rastreabilidade:</b> RF05; RF09; RN03; RN06; RN13; PR01; PR02</span>
+          <span><b>Data Owner:</b> Kaiky Vieira dos Santos</span>
+          <span><b>Data Steward:</b> Felipe Fragoso</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_contrato">
+              <td class="atributo">id_contrato</td>
+              <td class="desc">Identificador único do contrato.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="id_atendimento">
+              <td class="atributo">id_atendimento</td>
+              <td class="desc">Atendimento que originou o contrato. Único: no máximo um contrato por atendimento (RN03).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; atendimento.id_atendimento]</b> <b>[UK]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">atendimento.id_atendimento (sp_fechar_atendimento) -&gt; contrato</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="id_faixa">
+              <td class="atributo">id_faixa</td>
+              <td class="desc">Faixa etária aplicada na assinatura (RN06).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; plano_faixa_preco.id_faixa]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">plano_faixa_preco.id_faixa (calculada por sp_fechar_atendimento) -&gt; contrato</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="id_forma_pagamento">
+              <td class="atributo">id_forma_pagamento</td>
+              <td class="desc">Forma de pagamento escolhida (RF05).</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; forma_pagamento.id_forma_pagamento]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">forma_pagamento.id_forma_pagamento -&gt; processo financeiro externo</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_assinatura">
+              <td class="atributo">data_assinatura</td>
+              <td class="desc">Data da assinatura; referência para a idade do cliente e para o prazo de arrependimento.</td>
+              <td class="tipo">DATE</td>
+              <td class="cons"><b>NOT NULL</b> <b>CHECK (ck_contrato_data_cancelamento)</b> <b>CHECK (ck_contrato_vigencia)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Atendente (RF05) -&gt; RN13</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_inicio_vigencia">
+              <td class="atributo">data_inicio_vigencia</td>
+              <td class="desc">Início da vigência, maior ou igual à data de assinatura (CHECK).</td>
+              <td class="tipo">DATE</td>
+              <td class="cons"><b>NOT NULL</b> <b>CHECK (ck_contrato_vigencia)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Atendente (RF05) -&gt; processo financeiro externo</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="valor_mensalidade">
+              <td class="atributo">valor_mensalidade</td>
+              <td class="desc">Mensalidade congelada no ato da contratação, maior que zero (RN06).</td>
+              <td class="tipo">DECIMAL(10,2)</td>
+              <td class="cons"><b>NOT NULL</b> <b>CHECK (ck_contrato_valor)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">plano_faixa_preco.valor_mensalidade -&gt; contrato (nunca recalculado)</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="situacao">
+              <td class="atributo">situacao</td>
+              <td class="desc">ATIVO (padrão), CANCELADO_ARREPENDIMENTO ou CANCELADO. Arrependimento só em canal remoto e até 7 dias (RN13).</td>
+              <td class="tipo">ENUM(&#x27;ATIVO&#x27;, &#x27;CANCELADO_ARREPENDIMENTO&#x27;, &#x27;CANCELADO&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT ATIVO</b> <b>CHECK (ck_contrato_cancelamento)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Cancelamento (RF09) -&gt; vw_funil_atendimento (indicador separado)</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_cancelamento">
+              <td class="atributo">data_cancelamento</td>
+              <td class="desc">Data do cancelamento: nula somente quando ATIVO e nunca anterior à assinatura (CHECK).</td>
+              <td class="tipo">DATE</td>
+              <td class="cons"><b>NULL</b> <b>CHECK (ck_contrato_cancelamento)</b> <b>CHECK (ck_contrato_data_cancelamento)</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Cancelamento (RF09) -&gt; gatilho trg_contrato_bu</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="motivo_cancelamento">
+              <td class="atributo">motivo_cancelamento</td>
+              <td class="desc">Motivo informado no cancelamento (PR02).</td>
+              <td class="tipo">VARCHAR(255)</td>
+              <td class="cons"><b>NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Cancelamento (RF09) -&gt; relatórios</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            <tr data-coluna="data_registro">
+              <td class="atributo">data_registro</td>
+              <td class="desc">Data e hora do registro do contrato, gravadas pelo servidor.</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT CURRENT_TIMESTAMP</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">SGBD (DEFAULT CURRENT_TIMESTAMP) -&gt; auditoria</td>
+              <td class="rbac">Atendente: leitura e escrita (via sp_fechar_atendimento e cancelamento) | Gerente: leitura e escrita | Administrador: leitura | Exclusão física: ninguém</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cartao tabela-dic" id="tabela_log_auditoria" data-tabela="log_auditoria" data-bloco="Auditoria">
+        <header>
+          <h2>log_auditoria</h2>
+          <span class="bloco">Auditoria</span>
+        </header>
+        <p>Trilha de auditoria somente inserção das operações nas tabelas sensíveis, sem dados pessoais em claro.</p>
+        <div class="meta-tabela">
+          <span><b>Colunas:</b> 9</span>
+          <span><b>Colunas com dados pessoais:</b> 1</span>
+          <span><b>Rastreabilidade:</b> RF07; RNF01; RNF09; RNF10</span>
+          <span><b>Data Owner:</b> Jihady Nikuluz Cardoso</span>
+          <span><b>Data Steward:</b> Kaue Cândido Alberti</span>
+        </div>
+        <div class="rbac-tabela"><b>Controle de acesso da tabela (RBAC):</b> Administrador: leitura | Gerente e Atendente: sem acesso | Escrita: somente gatilhos e aplicação (INSERT) | Alteração e exclusão: bloqueadas</div>
+        <div class="rolagem">
+          <table class="dic">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Descrição / Regra de Negócio</th>
+                <th scope="col">Tipo e Tamanho</th>
+                <th scope="col">Constraints</th>
+                <th scope="col">Privacidade (LGPD/GDPR)</th>
+                <th scope="col">Linhagem (Data Lineage)</th>
+                <th scope="col">Controle de Acesso (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr data-coluna="id_log">
+              <td class="atributo">id_log</td>
+              <td class="desc">Identificador único do registro de auditoria (BIGINT para alto volume).</td>
+              <td class="tipo">BIGINT</td>
+              <td class="cons"><b class="pk">[PK]</b> <b>NOT NULL</b> <b>AUTO_INCREMENT</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gerado pelo SGBD</td>
+              <td class="rbac">Administrador: leitura | Gerente e Atendente: sem acesso | Escrita: somente gatilhos e aplicação (INSERT) | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="id_usuario">
+              <td class="atributo">id_usuario</td>
+              <td class="desc">Usuário que executou a operação.</td>
+              <td class="tipo">INT</td>
+              <td class="cons"><b class="fk">[FK -&gt; usuario.id_usuario]</b> <b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Variável de sessão da aplicação -&gt; consulta de auditoria (RF07)</td>
+              <td class="rbac">Administrador: leitura | Gerente e Atendente: sem acesso | Escrita: somente gatilhos e aplicação (INSERT) | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="tabela_afetada">
+              <td class="atributo">tabela_afetada</td>
+              <td class="desc">Nome da tabela alterada.</td>
+              <td class="tipo">VARCHAR(64)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gatilhos de auditoria -&gt; consulta de auditoria</td>
+              <td class="rbac">Administrador: leitura | Gerente e Atendente: sem acesso | Escrita: somente gatilhos e aplicação (INSERT) | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="id_registro_afetado">
+              <td class="atributo">id_registro_afetado</td>
+              <td class="desc">Chave primária do registro alterado.</td>
+              <td class="tipo">BIGINT</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gatilhos de auditoria -&gt; consulta de auditoria</td>
+              <td class="rbac">Administrador: leitura | Gerente e Atendente: sem acesso | Escrita: somente gatilhos e aplicação (INSERT) | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="operacao">
+              <td class="atributo">operacao</td>
+              <td class="desc">Tipo de operação: INSERT, UPDATE ou DELETE.</td>
+              <td class="tipo">ENUM(&#x27;INSERT&#x27;, &#x27;UPDATE&#x27;, &#x27;DELETE&#x27;)</td>
+              <td class="cons"><b>NOT NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gatilhos de auditoria -&gt; consulta de auditoria</td>
+              <td class="rbac">Administrador: leitura | Gerente e Atendente: sem acesso | Escrita: somente gatilhos e aplicação (INSERT) | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="valor_anterior">
+              <td class="atributo">valor_anterior</td>
+              <td class="desc">Estado anterior do registro em JSON, sem CPF, telefone ou e-mail em claro (RNF09).</td>
+              <td class="tipo">JSON</td>
+              <td class="cons"><b>NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gatilhos de auditoria (OLD) -&gt; investigação de incidentes</td>
+              <td class="rbac">Administrador: leitura | Gerente e Atendente: sem acesso | Escrita: somente gatilhos e aplicação (INSERT) | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="valor_novo">
+              <td class="atributo">valor_novo</td>
+              <td class="desc">Estado novo do registro em JSON, sem CPF, telefone ou e-mail em claro (RNF09).</td>
+              <td class="tipo">JSON</td>
+              <td class="cons"><b>NULL</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">Gatilhos de auditoria (NEW) -&gt; investigação de incidentes</td>
+              <td class="rbac">Administrador: leitura | Gerente e Atendente: sem acesso | Escrita: somente gatilhos e aplicação (INSERT) | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="ip_origem">
+              <td class="atributo">ip_origem</td>
+              <td class="desc">Endereço IP de origem da operação (IPv4 ou IPv6).</td>
+              <td class="tipo">VARCHAR(45)</td>
+              <td class="cons"><b>NULL</b></td>
+              <td><span class="badge dp" title="Dado pessoal">DP</span></td>
+              <td class="linhagem">Aplicação (requisição HTTPS) -&gt; investigação de incidentes</td>
+              <td class="rbac">Administrador: leitura | Gerente e Atendente: sem acesso | Escrita: somente gatilhos e aplicação (INSERT) | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            <tr data-coluna="data_operacao">
+              <td class="atributo">data_operacao</td>
+              <td class="desc">Data e hora da operação, gravadas pelo servidor.</td>
+              <td class="tipo">DATETIME</td>
+              <td class="cons"><b>NOT NULL</b> <b>DEFAULT CURRENT_TIMESTAMP</b></td>
+              <td><span class="badge na" title="Não aplicável">N/A</span></td>
+              <td class="linhagem">SGBD (DEFAULT CURRENT_TIMESTAMP) -&gt; consulta de auditoria</td>
+              <td class="rbac">Administrador: leitura | Gerente e Atendente: sem acesso | Escrita: somente gatilhos e aplicação (INSERT) | Alteração e exclusão: bloqueadas</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="cartao vazio" id="sem-resultados">Nenhuma tabela ou coluna encontrada para a busca.</div>
+
+      <footer class="rodape">
+        Dicionário de Dados — Gestão Inteligente (Holanda Seguros) · Grupo 2 · Análise e Desenvolvimento de Sistemas — UNICID · Banco de Dados · Prof. Diego Marques · 2026
+      </footer>
+    </main>
+  </div>
+
+  <div class="modal" id="modal-der" role="dialog" aria-modal="true" aria-labelledby="titulo-der" aria-hidden="true">
+    <div class="modal-cabecalho">
+      <h2 id="titulo-der">Diagrama Entidade-Relacionamento (DER) — v3.0</h2>
+      <span class="dica">Role o mouse para zoom · arraste para mover · Esc fecha</span>
+      <button class="botao-icone" id="fechar-der" type="button" aria-label="Fechar DER">Fechar</button>
+    </div>
+    <div class="area-zoom" id="area-zoom">
+      <img id="imagem-der" src="assets/der.png" alt="Diagrama Entidade-Relacionamento do projeto Gestão Inteligente" draggable="false">
+      <div class="controles-zoom">
+        <button type="button" class="panzoom-exclude" id="zoom-mais" aria-label="Aumentar zoom">+</button>
+        <button type="button" class="panzoom-exclude" id="zoom-menos" aria-label="Diminuir zoom">&minus;</button>
+        <button type="button" id="zoom-reset" class="reset panzoom-exclude" aria-label="Restaurar zoom e posição">Reset</button>
+      </div>
+      <div class="nivel-zoom" id="nivel-zoom">Zoom: 100%</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.6.2/dist/panzoom.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
